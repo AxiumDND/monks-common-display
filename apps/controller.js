@@ -1,6 +1,6 @@
 import { MonksCommonDisplay, log, i18n, setting } from "../monks-common-display.js";
 
-export class ControllerApp extends FormApplication {
+export class ControllerApp extends foundry.applications.api.ApplicationV2 {
     constructor(options = {}) {
         super(options);
     }
@@ -48,7 +48,7 @@ export class ControllerApp extends FormApplication {
             playerdata[id] = data;
         });
 
-        game.settings.set('monks-common-display', 'playerdata', playerdata).then(() => {
+        game.settings.set('monks-common-display-v13', 'playerdata', playerdata).then(() => {
             MonksCommonDisplay.emit("dataChange");
         });
 
@@ -60,5 +60,5 @@ export class ControllerApp extends FormApplication {
         var that = this;
 
         $('.dialog-buttons.save', html).click($.proxy(this.saveData, this));
-    };
+    }
 }

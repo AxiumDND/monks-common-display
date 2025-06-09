@@ -5,11 +5,11 @@ import { CommonToolbar } from "./apps/toolbar.js"
 export const DEBUG = false;
 
 export let debug = (...args) => {
-    if (DEBUG) console.log("DEBUG: monks-common-display | ", ...args);
+    if (DEBUG) console.log("DEBUG: monks-common-display-v13 | ", ...args);
 };
-export let log = (...args) => console.log("monks-common-display | ", ...args);
-export let warn = (...args) => console.warn("monks-common-display | ", ...args);
-export let error = (...args) => console.error("monks-common-display | ", ...args);
+export let log = (...args) => console.log("monks-common-display-v13 | ", ...args);
+export let warn = (...args) => console.warn("monks-common-display-v13 | ", ...args);
+export let error = (...args) => console.error("monks-common-display-v13 | ", ...args);
 export let i18n = key => {
     return game.i18n.localize(key);
 };
@@ -148,10 +148,10 @@ export class MonksCommonDisplay {
                 const documentId = event.currentTarget.closest(".document").dataset.documentId;
 
                 if (setting("per-scene")) {
-                    await canvas.scene.setFlag("monks-common-display", MonksCommonDisplay.selectToken, documentId);
-                    foundry.utils.setProperty(canvas.scene, `flags.monks-common-display.${MonksCommonDisplay.selectToken}`, documentId);
+                    await canvas.scene.setFlag("monks-common-display-v13", MonksCommonDisplay.selectToken, documentId);
+                    foundry.utils.setProperty(canvas.scene, `flags.monks-common-display-v13.${MonksCommonDisplay.selectToken}`, documentId);
                 } else {
-                    await game.settings.set("monks-common-display", MonksCommonDisplay.selectToken, documentId);
+                    await game.settings.set("monks-common-display-v13", MonksCommonDisplay.selectToken, documentId);
                 }
 
                 if (MonksCommonDisplay.selectToken == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
@@ -363,14 +363,14 @@ export class MonksCommonDisplay {
     }
 
     static registerHotKeys() {
-        game.keybindings.register('monks-common-display', 'clear-images', {
+        game.keybindings.register('monks-common-display-v13', 'clear-images', {
             name: 'MonksCommonDisplay.ClearImages',
             editable: [{ key: 'Comma', modifiers: ['Control'] }],
             onDown: () => {
                 MonksCommonDisplay.emit("closeImagePopout");
             }
         });
-        game.keybindings.register('monks-common-display', 'clear-journals', {
+        game.keybindings.register('monks-common-display-v13', 'clear-journals', {
             name: 'MonksCommonDisplay.ClearJournals',
             editable: [{ key: 'Period', modifiers: ['Control'] }],
             onDown: () => {
@@ -580,11 +580,11 @@ export class MonksCommonDisplay {
     }
 
     static get screenValue() {
-        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display.screen") : setting("screen");
+        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.screen") : setting("screen");
     }
 
     static get focusValue() {
-        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display.focus") : setting("focus");
+        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.focus") : setting("focus");
     }
 
     static isDefeated(token) {
@@ -662,7 +662,7 @@ Hooks.on("deleteCombat", function (combat) {
 
 /*
 Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.settings.get('monks-common-display', 'show-mirror-tool')) {
+    if (game.settings.get('monks-common-display-v13', 'show-mirror-tool')) {
         const mirrorPanTool = {
             name: "mirror-screen",
             title: "MonksCommonDisplay.mirror-screen",
@@ -687,7 +687,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         active: setting('show-toolbar'),
         tools: [],
         onClick: toggled => {
-            game.settings.set('monks-common-display', 'show-toolbar', toggled);
+            game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
             if (toggled) {
                 if (!MonksCommonDisplay.toolbar)
                     MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
@@ -712,7 +712,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
             visible: game.user.isGM,
             active: setting('show-toolbar'),
             onClick: toggled => {
-                game.settings.set('monks-common-display', 'show-toolbar', toggled);
+                game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
                 if (toggled) {
                     if (!MonksCommonDisplay.toolbar)
                         MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
