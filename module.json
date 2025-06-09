@@ -40,8 +40,8 @@
     "css/monks-common-display.css"
   ],
   "url": "https://github.com/AxiumDND/monks-common-display",
-  "download": "https://github.com/AxiumDND/monks-common-display/archive/v13.0.zip",
-  "manifest": "https://raw.githubusercontent.com/AxiumDND/monks-common-display/main/module.json",
+  "download": "https://github.com/AxiumDND/monks-common-display/archive/v13.0.1.zip",
+  "manifest": "https://raw.githubusercontent.com/AxiumDND/monks-common-display/v13.0.1/module.json",
   "bugs": "https://github.com/AxiumDND/monks-common-display/issues",
   "allowBugReporter": true,
   "id": "monks-common-display-v13",
