@@ -303,10 +303,10 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
     }
 
     _contextMenu(html) {
-        ContextMenu.create(this, html, ".common-button-group", this._getContextOptions(), {
+        foundry.applications.ux.ContextMenu.implementation.create(this, html, ".common-button-group", this._getContextOptions(), {
             hookName: "CommonDisplayContext"
         });
-        ContextMenu.create(this, html, ".common-button-group .header", this._getContextOptions(), {
+        foundry.applications.ux.ContextMenu.implementation.create(this, html, ".common-button-group .header", this._getContextOptions(), {
             eventName: "click",
             hookName: "CommonDisplayContext"
         });

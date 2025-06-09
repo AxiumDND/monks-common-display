@@ -272,29 +272,43 @@ export class MonksCommonDisplay {
             });
         }
 
-        Hooks.on('renderSceneControls', (app, html) => {
-            const element = html instanceof jQuery ? html[0] : html;
-            const controls = element.querySelector('#controls');
-            if (!controls) return;
-            
-            const li = document.createElement('li');
-            li.classList.add('scene-control', 'common-display-control');
-            li.title = 'Common Display';
-            li.dataset.control = 'common-display';
-            
-            const icon = document.createElement('i');
-            icon.classList.add('fas', 'fa-desktop');
-            li.appendChild(icon);
-            
-            controls.appendChild(li);
-            
-            li.addEventListener('click', () => {
-                if (game.user.isGM && setting("show-toolbar")) {
-                    if (MonksCommonDisplay.toolbar == undefined)
-                        MonksCommonDisplay.toolbar = new CommonToolbar();
-                    MonksCommonDisplay.toolbar.render(true);
-                }
-            });
+        Hooks.on('renderSceneControls', (control, html, data) => {
+            if (game.user.isGM) {
+                const name = 'monkscommondisplay';
+                const title = "Toggle Common Display Bar";
+                const icon = 'fas fa-chalkboard-teacher';
+                const active = setting('show-toolbar');
+                const mainControls = html.querySelector('.main-controls');
+                if (!mainControls) return;
+                
+                const btn = document.createElement('li');
+                btn.classList.add('common-display', 'toggle');
+                if (game.modules.get("minimal-ui")?.active) btn.classList.add("minimal");
+                if (active) btn.classList.add('active');
+                btn.title = title;
+                btn.dataset.tool = name;
+                
+                const iconElement = document.createElement('i');
+                iconElement.classList.add(...icon.split(' '));
+                btn.appendChild(iconElement);
+                
+                btn.addEventListener('click', () => {
+                    let toggled = !setting("show-toolbar");
+                    game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
+                    if (toggled) {
+                        if (!MonksCommonDisplay.toolbar)
+                            MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
+                        else
+                            MonksCommonDisplay.toolbar.render(true);
+                    } else {
+                        if (MonksCommonDisplay.toolbar)
+                            MonksCommonDisplay.toolbar.close({ properClose: true });
+                    }
+                    btn.classList.toggle("active", toggled);
+                });
+                
+                mainControls.appendChild(btn);
+            }
         });
     }
 
@@ -732,8 +746,21 @@ Hooks.on('renderSceneControls', (control, html, data) => {
         const title = "Toggle Common Display Bar";
         const icon = 'fas fa-chalkboard-teacher';
         const active = setting('show-toolbar');
-        const btn = $(`<li class="common-display toggle ${game.modules.get("minimal-ui")?.active ? "minimal " : ""}${active ? 'active' : ''}" title="${title}" data-tool="${name}"><i class="${icon}"></i></li>`);
-        btn.on('click', () => {
+        const mainControls = html.querySelector('.main-controls');
+        if (!mainControls) return;
+        
+        const btn = document.createElement('li');
+        btn.classList.add('common-display', 'toggle');
+        if (game.modules.get("minimal-ui")?.active) btn.classList.add("minimal");
+        if (active) btn.classList.add('active');
+        btn.title = title;
+        btn.dataset.tool = name;
+        
+        const iconElement = document.createElement('i');
+        iconElement.classList.add(...icon.split(' '));
+        btn.appendChild(iconElement);
+        
+        btn.addEventListener('click', () => {
             let toggled = !setting("show-toolbar");
             game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
             if (toggled) {
@@ -745,9 +772,10 @@ Hooks.on('renderSceneControls', (control, html, data) => {
                 if (MonksCommonDisplay.toolbar)
                     MonksCommonDisplay.toolbar.close({ properClose: true });
             }
-            $('.main-controls .common-display', html).toggleClass("active", toggled);
+            btn.classList.toggle("active", toggled);
         });
-        html.find('.main-controls').append(btn);
+        
+        mainControls.appendChild(btn);
     }
 });
 

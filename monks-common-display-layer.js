@@ -1,4 +1,6 @@
-export class MonksCommonDisplayLayer extends InteractionLayer {
+import { MonksCommonDisplay, log, i18n, setting } from "./monks-common-display.js";
+
+export class MonksCommonDisplayLayer extends foundry.canvas.layers.InteractionLayer {
     constructor() {
         super();
     }
