@@ -202,7 +202,7 @@ export class MonksCommonDisplay {
 
                     playerdata[id] = data;
 
-                    game.settings.set('monks-common-display', 'playerdata', playerdata).then(() => {
+                    game.settings.set('monks-common-display-v13', 'playerdata', playerdata).then(() => {
                         MonksCommonDisplay.emit("dataChange");
                     });
                     ui.players.render();
@@ -258,7 +258,7 @@ export class MonksCommonDisplay {
             MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
 
         if (!game.modules.get('monks-combat-details')?.active && !game.modules.get('monks-enhanced-journal')?.active) {
-            patchFunc("Draggable.prototype._onDragMouseUp", async function (wrapped, ...args) {
+            patchFunc("foundry.applications.ux.Draggable.implementation.prototype._onDragMouseUp", async function (wrapped, ...args) {
                 try {
                     if (this.app.constructor._getInheritanceChain) {
                         for (const cls of this.app.constructor._getInheritanceChain()) {
@@ -319,7 +319,7 @@ export class MonksCommonDisplay {
         let olddata = MonksCommonDisplay.playerdata;
         MonksCommonDisplay.playerdata = data[game.user.id] || { display: false, mirror: false, selection: false };
 
-        game.settings.set('monks-common-display', 'startupdata', MonksCommonDisplay.playerdata.display);
+        game.settings.set('monks-common-display-v13', 'startupdata', MonksCommonDisplay.playerdata.display);
 
         if (olddata.display != MonksCommonDisplay.playerdata.display)
             MonksCommonDisplay.toggleCommonDisplay();
@@ -735,7 +735,7 @@ Hooks.on('renderSceneControls', (control, html, data) => {
         const btn = $(`<li class="common-display toggle ${game.modules.get("minimal-ui")?.active ? "minimal " : ""}${active ? 'active' : ''}" title="${title}" data-tool="${name}"><i class="${icon}"></i></li>`);
         btn.on('click', () => {
             let toggled = !setting("show-toolbar");
-            game.settings.set('monks-common-display', 'show-toolbar', toggled);
+            game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
             if (toggled) {
                 if (!MonksCommonDisplay.toolbar)
                     MonksCommonDisplay.toolbar = new CommonToolbar().render(true);

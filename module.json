@@ -1,7 +1,7 @@
 {
   "title": "Monk's Common Display V13",
   "description": "Set up a display without all the ui so that it can be displayed on an alternate screen (V13 Compatible)",
-  "version": "13.0.1",
+  "version": "13.0.2",
   "socket": true,
   "authors": [
     {
@@ -40,8 +40,8 @@
     "css/monks-common-display.css"
   ],
   "url": "https://github.com/AxiumDND/monks-common-display",
-  "download": "https://github.com/AxiumDND/monks-common-display/archive/v13.0.1.zip",
-  "manifest": "https://raw.githubusercontent.com/AxiumDND/monks-common-display/v13.0.1/module.json",
+  "download": "https://github.com/AxiumDND/monks-common-display/archive/v13.0.2.zip",
+  "manifest": "https://raw.githubusercontent.com/AxiumDND/monks-common-display/v13.0.2/module.json",
   "bugs": "https://github.com/AxiumDND/monks-common-display/issues",
   "allowBugReporter": true,
   "id": "monks-common-display-v13",

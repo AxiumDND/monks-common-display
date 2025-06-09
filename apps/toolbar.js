@@ -1,6 +1,6 @@
 import { MonksCommonDisplay, log, i18n, setting } from "../monks-common-display.js";
 
-export class CommonToolbar extends Application {
+export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
     constructor(options = {}) {
         super(options);
 
