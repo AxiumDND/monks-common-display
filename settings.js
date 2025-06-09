@@ -5,6 +5,13 @@ export const registerSettings = function () {
     // Register any custom module settings here
 	let modulename = "monks-common-display-v13";
 
+	game.settings.register(modulename, "startupdata", {
+		scope: "client",
+		config: false,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.registerMenu(modulename, 'configure', {
 		name: 'Configure Common Display',
 		label: 'Configure Common Display',
@@ -174,13 +181,6 @@ export const registerSettings = function () {
 		default: false,
 		type: Boolean,
 		requiresReload: true
-	});
-
-	game.settings.register(modulename, "startupdata", {
-		scope: "client",
-		config: false,
-		default: false,
-		type: Boolean,
 	});
 
 	game.settings.register(modulename, "playerdata", {

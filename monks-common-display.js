@@ -271,6 +271,31 @@ export class MonksCommonDisplay {
                 return wrapped(...args);
             });
         }
+
+        Hooks.on('renderSceneControls', (app, html) => {
+            const element = html instanceof jQuery ? html[0] : html;
+            const controls = element.querySelector('#controls');
+            if (!controls) return;
+            
+            const li = document.createElement('li');
+            li.classList.add('scene-control', 'common-display-control');
+            li.title = 'Common Display';
+            li.dataset.control = 'common-display';
+            
+            const icon = document.createElement('i');
+            icon.classList.add('fas', 'fa-desktop');
+            li.appendChild(icon);
+            
+            controls.appendChild(li);
+            
+            li.addEventListener('click', () => {
+                if (game.user.isGM && setting("show-toolbar")) {
+                    if (MonksCommonDisplay.toolbar == undefined)
+                        MonksCommonDisplay.toolbar = new CommonToolbar();
+                    MonksCommonDisplay.toolbar.render(true);
+                }
+            });
+        });
     }
 
     static emit(action, args = {}) {
