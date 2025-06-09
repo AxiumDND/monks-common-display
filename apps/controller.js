@@ -7,9 +7,9 @@ export class ControllerApp extends FormApplication {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "monkscommondisplay",
-            title: "Monks Common Display",
-            template: "./modules/monks-common-display/templates/controller.html",
+            id: "common-display-controller",
+            title: i18n("MonksCommonDisplay.Title"),
+            template: "./modules/monks-common-display-v13/templates/controller.html",
             width: 400,
             height: "auto",
             popOut: true

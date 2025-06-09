@@ -9,9 +9,9 @@ export class PlayerInterface extends Application {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "player-display",
-            title: "",
-            template: "./modules/monks-common-display/templates/player-interface.html",
+            id: "common-display-player-interface",
+            title: i18n("MonksCommonDisplay.Title"),
+            template: "./modules/monks-common-display-v13/templates/player-interface.html",
             tabs: [{ navSelector: ".tabs", contentSelector: ".player-interface", initial: "direction" }],
             width: 400,
             height: 400,

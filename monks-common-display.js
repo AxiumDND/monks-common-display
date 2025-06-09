@@ -14,20 +14,26 @@ export let i18n = key => {
     return game.i18n.localize(key);
 };
 export let setting = key => {
-    return game.settings.get("monks-common-display", key);
+    return game.settings.get("monks-common-display-v13", key);
 };
 
 export let patchFunc = (prop, func, type = "WRAPPER") => {
     let nonLibWrapper = () => {
-        const oldFunc = eval(prop);
-        eval(`${prop} = function (event) {
-            return func.call(this, ${type != "OVERRIDE" ? "oldFunc.bind(this)," : ""} ...arguments);
-        }`);
+        try {
+            const oldFunc = foundry.utils.getProperty(globalThis, prop);
+            foundry.utils.setProperty(globalThis, prop, function() {
+                return func.call(this, type !== "OVERRIDE" ? oldFunc.bind(this) : null, ...arguments);
+            });
+        } catch (e) {
+            console.error(`monks-common-display-v13 | Failed to patch ${prop}:`, e);
+        }
     }
+    
     if (game.modules.get("lib-wrapper")?.active) {
         try {
-            libWrapper.register("monks-common-display", prop, func, type);
+            libWrapper.register("monks-common-display-v13", prop, func, type);
         } catch (e) {
+            console.warn(`monks-common-display-v13 | LibWrapper failed to register ${prop}, falling back:`, e);
             nonLibWrapper();
         }
     } else {
@@ -62,13 +68,13 @@ export class MonksCommonDisplay {
     static windows = {};
     static gmControlledTokens = new Set();
     static init() {
-        MonksCommonDisplay.SOCKET = "module.monks-common-display";
+        MonksCommonDisplay.SOCKET = "module.monks-common-display-v13";
 
         registerSettings();
         MonksCommonDisplay.registerHotKeys();
 
         if (game.modules.get("lib-wrapper")?.active) {
-            libWrapper.ignore_conflicts("monks-common-display", "monks-active-tiles", "ActorDirectory.prototype._onClickEntryName");
+            libWrapper.ignore_conflicts("monks-common-display-v13", "monks-active-tiles", "ActorDirectory.prototype._onClickEntryName");
         }
 
         //this is so the screen starts up with the correct information, it'll be altered once the players are actually loaded

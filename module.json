@@ -1,7 +1,7 @@
 {
-  "title": "Monk's Common Display",
-  "description": "Set up a display without all the ui so that it can be displayed on an alternate screen",
-  "version": "12.01",
+  "title": "Monk's Common Display V13",
+  "description": "Set up a display without all the ui so that it can be displayed on an alternate screen (V13 Compatible)",
+  "version": "13.0",
   "socket": true,
   "authors": [
     {
@@ -12,6 +12,12 @@
 		  "patreon": "ironmonk",
 		  "ko-fi": "ironmonk88"
 	  }
+    },
+    {
+      "name": "AxiumDND",
+      "flags": {
+        "github": "AxiumDND"
+      }
     }
   ],
   "languages": [
@@ -33,17 +39,17 @@
   "styles": [
     "css/monks-common-display.css"
   ],
-  "url": "https://github.com/ironmonk88/monks-common-display",
-  "download": "https://github.com/ironmonk88/monks-common-display/archive/12.01.zip",
-  "manifest": "https://github.com/ironmonk88/monks-common-display/releases/latest/download/module.json",
-  "bugs": "https://github.com/ironmonk88/monks-common-display/issues",
+  "url": "https://github.com/AxiumDND/monks-common-display",
+  "download": "https://github.com/AxiumDND/monks-common-display/archive/v13.0.zip",
+  "manifest": "https://raw.githubusercontent.com/AxiumDND/monks-common-display/main/module.json",
+  "bugs": "https://github.com/AxiumDND/monks-common-display/issues",
   "allowBugReporter": true,
-  "id": "monks-common-display",
+  "id": "monks-common-display-v13",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12"
+    "minimum": "13",
+    "verified": "13"
   },
-  "name": "monks-common-display",
-  "minimumCoreVersion": "12",
-  "compatibleCoreVersion": "12"
+  "name": "monks-common-display-v13",
+  "minimumCoreVersion": "13",
+  "compatibleCoreVersion": "13"
 }

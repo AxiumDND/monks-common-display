@@ -21,8 +21,9 @@ export class CommonToolbar extends Application {
 
     static get defaultOptions() {
         let options = foundry.utils.mergeObject(super.defaultOptions, {
-            id: "common-toolbar",
-            template: "./modules/monks-common-display/templates/toolbar.html",
+            id: "common-display-toolbar",
+            title: i18n("MonksCommonDisplay.Title"),
+            template: "./modules/monks-common-display-v13/templates/toolbar.html",
             width: 'auto',
             height: 95,
             popOut: false
