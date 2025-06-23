@@ -9,13 +9,16 @@ export class PlayerInterface extends foundry.applications.api.ApplicationV2 {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "common-display-player-interface",
-            title: i18n("MonksCommonDisplay.Title"),
-            template: "./modules/monks-common-display-v13/templates/player-interface.html",
-            tabs: [{ navSelector: ".tabs", contentSelector: ".player-interface", initial: "direction" }],
-            width: 400,
-            height: 400,
-            popOut: true
+            id: "player-interface",
+            classes: ["player-interface"],
+            template: "./modules/axium-monks-common-display/templates/player-interface.html",
+            popOut: false,
+            resizable: false,
+            minimizable: false,
+            width: 300,
+            height: "auto",
+            top: 100,
+            left: 100
         });
     }
 

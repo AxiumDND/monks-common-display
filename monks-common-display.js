@@ -5,16 +5,16 @@ import { CommonToolbar } from "./apps/toolbar.js"
 export const DEBUG = false;
 
 export let debug = (...args) => {
-    if (DEBUG) console.log("DEBUG: monks-common-display-v13 | ", ...args);
+    if (DEBUG) console.log("DEBUG: axium-monks-common-display | ", ...args);
 };
-export let log = (...args) => console.log("monks-common-display-v13 | ", ...args);
-export let warn = (...args) => console.warn("monks-common-display-v13 | ", ...args);
-export let error = (...args) => console.error("monks-common-display-v13 | ", ...args);
+export let log = (...args) => console.log("axium-monks-common-display | ", ...args);
+export let warn = (...args) => console.warn("axium-monks-common-display | ", ...args);
+export let error = (...args) => console.error("axium-monks-common-display | ", ...args);
 export let i18n = key => {
     return game.i18n.localize(key);
 };
 export let setting = key => {
-    return game.settings.get("monks-common-display-v13", key);
+    return game.settings.get("axium-monks-common-display", key);
 };
 
 export let patchFunc = (prop, func, type = "WRAPPER") => {
@@ -25,15 +25,15 @@ export let patchFunc = (prop, func, type = "WRAPPER") => {
                 return func.call(this, type !== "OVERRIDE" ? oldFunc.bind(this) : null, ...arguments);
             });
         } catch (e) {
-            console.error(`monks-common-display-v13 | Failed to patch ${prop}:`, e);
+            console.error(`axium-monks-common-display | Failed to patch ${prop}:`, e);
         }
     }
     
     if (game.modules.get("lib-wrapper")?.active) {
         try {
-            libWrapper.register("monks-common-display-v13", prop, func, type);
+            libWrapper.register("axium-monks-common-display", prop, func, type);
         } catch (e) {
-            console.warn(`monks-common-display-v13 | LibWrapper failed to register ${prop}, falling back:`, e);
+            console.warn(`axium-monks-common-display | LibWrapper failed to register ${prop}, falling back:`, e);
             nonLibWrapper();
         }
     } else {
@@ -68,13 +68,13 @@ export class MonksCommonDisplay {
     static windows = {};
     static gmControlledTokens = new Set();
     static init() {
-        MonksCommonDisplay.SOCKET = "module.monks-common-display-v13";
+        MonksCommonDisplay.SOCKET = "module.axium-monks-common-display";
 
         registerSettings();
         MonksCommonDisplay.registerHotKeys();
 
         if (game.modules.get("lib-wrapper")?.active) {
-            libWrapper.ignore_conflicts("monks-common-display-v13", "monks-active-tiles", "ActorDirectory.prototype._onClickEntryName");
+            libWrapper.ignore_conflicts("axium-monks-common-display", "monks-active-tiles", "ActorDirectory.prototype._onClickEntryName");
         }
 
         //this is so the screen starts up with the correct information, it'll be altered once the players are actually loaded
@@ -148,10 +148,10 @@ export class MonksCommonDisplay {
                 const documentId = event.currentTarget.closest(".document").dataset.documentId;
 
                 if (setting("per-scene")) {
-                    await canvas.scene.setFlag("monks-common-display-v13", MonksCommonDisplay.selectToken, documentId);
-                    foundry.utils.setProperty(canvas.scene, `flags.monks-common-display-v13.${MonksCommonDisplay.selectToken}`, documentId);
+                    await canvas.scene.setFlag("axium-monks-common-display", MonksCommonDisplay.selectToken, documentId);
+                    foundry.utils.setProperty(canvas.scene, `flags.axium-monks-common-display.${MonksCommonDisplay.selectToken}`, documentId);
                 } else {
-                    await game.settings.set("monks-common-display-v13", MonksCommonDisplay.selectToken, documentId);
+                    await game.settings.set("axium-monks-common-display", MonksCommonDisplay.selectToken, documentId);
                 }
 
                 if (MonksCommonDisplay.selectToken == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
@@ -202,7 +202,7 @@ export class MonksCommonDisplay {
 
                     playerdata[id] = data;
 
-                    game.settings.set('monks-common-display-v13', 'playerdata', playerdata).then(() => {
+                    game.settings.set('axium-monks-common-display', 'playerdata', playerdata).then(() => {
                         MonksCommonDisplay.emit("dataChange");
                     });
                     ui.players.render();
@@ -274,7 +274,7 @@ export class MonksCommonDisplay {
 
         Hooks.on('renderSceneControls', (control, html, data) => {
             if (game.user.isGM) {
-                const name = 'monkscommondisplay';
+                const name = 'axium-monks-common-display';
                 const title = "Toggle Common Display Bar";
                 const icon = 'fas fa-chalkboard-teacher';
                 const active = setting('show-toolbar');
@@ -294,7 +294,7 @@ export class MonksCommonDisplay {
                 
                 btn.addEventListener('click', () => {
                     let toggled = !setting("show-toolbar");
-                    game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
+                    game.settings.set('axium-monks-common-display', 'show-toolbar', toggled);
                     if (toggled) {
                         if (!MonksCommonDisplay.toolbar)
                             MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
@@ -333,7 +333,7 @@ export class MonksCommonDisplay {
         let olddata = MonksCommonDisplay.playerdata;
         MonksCommonDisplay.playerdata = data[game.user.id] || { display: false, mirror: false, selection: false };
 
-        game.settings.set('monks-common-display-v13', 'startupdata', MonksCommonDisplay.playerdata.display);
+        game.settings.set('axium-monks-common-display', 'startupdata', MonksCommonDisplay.playerdata.display);
 
         if (olddata.display != MonksCommonDisplay.playerdata.display)
             MonksCommonDisplay.toggleCommonDisplay();
@@ -363,14 +363,14 @@ export class MonksCommonDisplay {
     }
 
     static registerHotKeys() {
-        game.keybindings.register('monks-common-display-v13', 'clear-images', {
+        game.keybindings.register('axium-monks-common-display', 'clear-images', {
             name: 'MonksCommonDisplay.ClearImages',
             editable: [{ key: 'Comma', modifiers: ['Control'] }],
             onDown: () => {
                 MonksCommonDisplay.emit("closeImagePopout");
             }
         });
-        game.keybindings.register('monks-common-display-v13', 'clear-journals', {
+        game.keybindings.register('axium-monks-common-display', 'clear-journals', {
             name: 'MonksCommonDisplay.ClearJournals',
             editable: [{ key: 'Period', modifiers: ['Control'] }],
             onDown: () => {
@@ -580,11 +580,11 @@ export class MonksCommonDisplay {
     }
 
     static get screenValue() {
-        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.screen") : setting("screen");
+        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.axium-monks-common-display.screen") : setting("screen");
     }
 
     static get focusValue() {
-        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.focus") : setting("focus");
+        return setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.axium-monks-common-display.focus") : setting("focus");
     }
 
     static isDefeated(token) {
@@ -662,7 +662,7 @@ Hooks.on("deleteCombat", function (combat) {
 
 /*
 Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.settings.get('monks-common-display-v13', 'show-mirror-tool')) {
+    if (game.settings.get('axium-monks-common-display-v13', 'show-mirror-tool')) {
         const mirrorPanTool = {
             name: "mirror-screen",
             title: "MonksCommonDisplay.mirror-screen",
@@ -679,7 +679,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
 /*
 Hooks.on('getSceneControlButtons', (controls) => {
     controls.push({
-        name: 'monkscommondisplay',
+        name: 'axium-monks-common-display',
         title: "Monks Common Display",
         icon: 'fas fa-chalkboard-teacher',
         toggle: true,
@@ -687,7 +687,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         active: setting('show-toolbar'),
         tools: [],
         onClick: toggled => {
-            game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
+            game.settings.set('axium-monks-common-display-v13', 'show-toolbar', toggled);
             if (toggled) {
                 if (!MonksCommonDisplay.toolbar)
                     MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
@@ -705,14 +705,14 @@ Hooks.on("getSceneControlButtons", (controls) => {
     if (game.user.isGM) {
         let tokenControls = controls.find(control => control.name === "token")
         tokenControls.tools.push({
-            name: "monkscommondisplay",
+            name: "axium-monks-common-display",
             title: "Toggle Common Display Bar",
             icon: "fas fa-chalkboard-teacher",
             toggle: true,
             visible: game.user.isGM,
             active: setting('show-toolbar'),
             onClick: toggled => {
-                game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
+                game.settings.set('axium-monks-common-display-v13', 'show-toolbar', toggled);
                 if (toggled) {
                     if (!MonksCommonDisplay.toolbar)
                         MonksCommonDisplay.toolbar = new CommonToolbar().render(true);
@@ -742,7 +742,7 @@ Hooks.on('renderPlayerList', async (playerList, html, data) => {
 
 Hooks.on('renderSceneControls', (control, html, data) => {
     if (game.user.isGM) {
-        const name = 'monkscommondisplay';
+        const name = 'axium-monks-common-display';
         const title = "Toggle Common Display Bar";
         const icon = 'fas fa-chalkboard-teacher';
         const active = setting('show-toolbar');
@@ -762,7 +762,7 @@ Hooks.on('renderSceneControls', (control, html, data) => {
         
         btn.addEventListener('click', () => {
             let toggled = !setting("show-toolbar");
-            game.settings.set('monks-common-display-v13', 'show-toolbar', toggled);
+            game.settings.set('axium-monks-common-display', 'show-toolbar', toggled);
             if (toggled) {
                 if (!MonksCommonDisplay.toolbar)
                     MonksCommonDisplay.toolbar = new CommonToolbar().render(true);

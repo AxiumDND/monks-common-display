@@ -7,9 +7,9 @@ export class ControllerApp extends foundry.applications.api.ApplicationV2 {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "common-display-controller",
+            id: "controller-app",
             title: i18n("MonksCommonDisplay.Title"),
-            template: "./modules/monks-common-display-v13/templates/controller.html",
+            template: "./modules/axium-monks-common-display/templates/controller.html",
             width: 400,
             height: "auto",
             popOut: true
@@ -48,7 +48,7 @@ export class ControllerApp extends foundry.applications.api.ApplicationV2 {
             playerdata[id] = data;
         });
 
-        game.settings.set('monks-common-display-v13', 'playerdata', playerdata).then(() => {
+        game.settings.set('axium-monks-common-display', 'playerdata', playerdata).then(() => {
             MonksCommonDisplay.emit("dataChange");
         });
 

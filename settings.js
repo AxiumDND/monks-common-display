@@ -3,7 +3,7 @@ import { ControllerApp } from "./apps/controller.js"
 
 export const registerSettings = function () {
     // Register any custom module settings here
-	let modulename = "monks-common-display-v13";
+	let modulename = "axium-monks-common-display";
 
 	game.settings.register(modulename, "startupdata", {
 		scope: "client",

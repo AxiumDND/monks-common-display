@@ -21,12 +21,17 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
 
     static get defaultOptions() {
         let options = foundry.utils.mergeObject(super.defaultOptions, {
-            id: "common-display-toolbar",
-            title: i18n("MonksCommonDisplay.Title"),
-            template: "./modules/monks-common-display-v13/templates/toolbar.html",
-            width: 'auto',
-            height: 95,
-            popOut: false
+            id: "common-toolbar",
+            classes: ["common-toolbar"],
+            template: "./modules/axium-monks-common-display/templates/toolbar.html",
+            popOut: false,
+            resizable: false,
+            minimizable: false,
+            width: 300,
+            height: "auto",
+            top: 100,
+            left: 100,
+            dragDrop: [{ dragSelector: ".drag-handle" }]
         });
         return options;
     }
@@ -46,8 +51,8 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
         else
             collapseIcon = this._collapsed ? "fa-caret-right" : "fa-caret-left";
 
-        let screen = (setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.screen") : setting("screen")) || "gm";
-        let focus = (setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.monks-common-display-v13.focus") : setting("focus")) || "gm";
+        let screen = (setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.axium-monks-common-display.screen") : setting("screen")) || "gm";
+        let focus = (setting("per-scene") ? foundry.utils.getProperty(canvas.scene, "flags.axium-monks-common-display.focus") : setting("focus")) || "gm";
 
         return foundry.utils.mergeObject(super.getData(options), {
             tokens: this.tokens,
@@ -129,14 +134,14 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
     }
 
     getPos() {
-        this.pos = game.user.getFlag("monks-common-display-v13", "position");
+        this.pos = game.user.getFlag("axium-monks-common-display", "position");
 
         if (this.pos == undefined) {
             this.pos = {
                 top: 60,
                 left: 120
             };
-            game.user.setFlag("monks-common-display-v13", "position", this.pos);
+            game.user.setFlag("axium-monks-common-display", "position", this.pos);
         }
 
         let result = '';
@@ -152,14 +157,14 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
     }
 
     setPos() {
-        this.pos = game.user.getFlag("monks-common-display-v13", "position");
+        this.pos = game.user.getFlag("axium-monks-common-display", "position");
 
         if (this.pos == undefined) {
             this.pos = {
                 top: 60,
                 left: (($('#board').width / 2) - 150)
             };
-            game.user.setFlag("monks-common-display-v13", "position", this.pos);
+            game.user.setFlag("axium-monks-common-display", "position", this.pos);
         }
 
         log('Setting position', this.pos, this.element);
@@ -178,17 +183,17 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
             if (!!MonksCommonDisplay.selectToken) {
                 let tokenids = canvas.tokens.controlled.map((t) => t.id).join(",");
                 if (setting("per-scene")) {
-                    await canvas.scene.setFlag("monks-common-display-v13", MonksCommonDisplay.selectToken, tokenids);
-                    foundry.utils.setProperty(canvas.scene, `flags.monks-common-display-v13.${MonksCommonDisplay.selectToken}`, tokenids);
+                    await canvas.scene.setFlag("axium-monks-common-display", MonksCommonDisplay.selectToken, tokenids);
+                    foundry.utils.setProperty(canvas.scene, `flags.axium-monks-common-display.${MonksCommonDisplay.selectToken}`, tokenids);
                 } else {
-                    await game.settings.set("monks-common-display-v13", MonksCommonDisplay.selectToken, tokenids);
+                    await game.settings.set("axium-monks-common-display", MonksCommonDisplay.selectToken, tokenids);
                 }
                 if (MonksCommonDisplay.selectToken == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
 
                 MonksCommonDisplay.selectToken = null;
             } else {
                 let active = !setting("screen-toggle");
-                await game.settings.set("monks-common-display-v13", "screen-toggle", active);
+                await game.settings.set("axium-monks-common-display", "screen-toggle", active);
                 if (active) {
                     MonksCommonDisplay.screenChanged();
                 }
@@ -197,7 +202,7 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
         });
         $('.common-display-button.focus', html).on("click", async (event) => {
             let active = !setting("focus-toggle");
-            await game.settings.set("monks-common-display-v13", "focus-toggle", active);
+            await game.settings.set("axium-monks-common-display", "focus-toggle", active);
             MonksCommonDisplay.focusChanged();
             this.render();
         });
@@ -294,7 +299,7 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
                         //$(elmnt).css({ bottom: (position.bottom || ''), top: (position.top || ''), left: (position.left || ''), right: (position.right || '') });
 
                         //log(`Setting monks-tokenbar position:`, position);
-                        game.user.setFlag('monks-common-display-v13', 'position', position);
+                        game.user.setFlag('axium-monks-common-display', 'position', position);
                         this.pos = position;
                     }
                 }
@@ -322,9 +327,9 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
                     let action = btn.closest(".common-button-group").data("action");
                     MonksCommonDisplay.selectToken = null;
                     if (setting("per-scene"))
-                        await canvas.scene.setFlag("monks-common-display-v13", action, "gm");
+                        await canvas.scene.setFlag("axium-monks-common-display", action, "gm");
                     else
-                        await game.settings.set("monks-common-display-v13", action, "gm");
+                        await game.settings.set("axium-monks-common-display", action, "gm");
                     if (action == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
                     this.render(true);
                 }
@@ -339,9 +344,9 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
                     let action = btn.closest(".common-button-group").data("action");
                     MonksCommonDisplay.selectToken = null;
                     if (setting("per-scene"))
-                        await canvas.scene.setFlag("monks-common-display-v13", action, "scene");
+                        await canvas.scene.setFlag("axium-monks-common-display", action, "scene");
                     else
-                        await game.settings.set("monks-common-display-v13", action, "scene");
+                        await game.settings.set("axium-monks-common-display", action, "scene");
                     if (action == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
                     this.render(true);
                 }
@@ -354,9 +359,9 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
                     let action = btn.closest(".common-button-group").data("action");
                     MonksCommonDisplay.selectToken = null;
                     if (setting("per-scene"))
-                        await canvas.scene.setFlag("monks-common-display-v13", action, "combat");
+                        await canvas.scene.setFlag("axium-monks-common-display", action, "combat");
                     else
-                        await game.settings.set("monks-common-display-v13", action, "combat");
+                        await game.settings.set("axium-monks-common-display", action, "combat");
                     if (action == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
                     this.render(true);
                 }
@@ -371,9 +376,9 @@ export class CommonToolbar extends foundry.applications.api.ApplicationV2 {
                     let action = btn.closest(".common-button-group").data("action");
                     MonksCommonDisplay.selectToken = null;
                     if (setting("per-scene"))
-                        await canvas.scene.setFlag("monks-common-display-v13", action, "party");
+                        await canvas.scene.setFlag("axium-monks-common-display", action, "party");
                     else
-                        await game.settings.set("monks-common-display-v13", action, "party");
+                        await game.settings.set("axium-monks-common-display", action, "party");
                     if (action == "screen") MonksCommonDisplay.screenChanged(); else MonksCommonDisplay.focusChanged();
                     this.render(true);
                 }
